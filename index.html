@@ -176,6 +176,60 @@
     animation: riseIn 2s ease 2.8s both;
     white-space: nowrap;
   }
+
+  .popup {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.58);
+    backdrop-filter: blur(10px);
+  }
+
+  .popup.is-visible {
+    display: flex;
+  }
+
+  .popup-card {
+    width: min(92vw, 420px);
+    padding: 28px 24px;
+    border-radius: 24px;
+    border: 1px solid rgba(167,139,250,0.28);
+    background: rgba(10, 7, 24, 0.95);
+    box-shadow: 0 0 36px rgba(130,100,255,0.22);
+    text-align: center;
+  }
+
+  .popup-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 36px);
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .popup-card p {
+    color: rgba(220,230,255,0.72);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .popup-close {
+    margin-top: 18px;
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: 1px solid rgba(167,139,250,0.34);
+    background: rgba(167,139,250,0.1);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -208,6 +262,14 @@
 </div>
 
 <div class="bottom-tag">onlyadi.in &nbsp;—&nbsp; every adi has a place in this cosmos</div>
+
+<div class="popup" id="popup">
+  <div class="popup-card">
+    <h2>Work in Process</h2>
+    <p>The universe is still being built. Please check back soon.</p>
+    <button class="popup-close" type="button" onclick="closePopup()">Close</button>
+  </div>
+</div>
 
 <script>
 const canvas = document.getElementById('cosmos');
@@ -583,14 +645,16 @@ document.getElementById('soundBtn').addEventListener('click',()=>{
 
 function enterSite(){
   const btn=document.querySelector('.enter-btn');
-  btn.textContent='✦  Entering the Universe...  ✦';
+  btn.textContent='Work in Process';
   btn.style.borderColor='rgba(167,139,250,0.6)';
-  scaleVel=0.005;
-  setTimeout(()=>{
-    document.body.style.transition='opacity 1.2s ease';
-    document.body.style.opacity='0';
-    setTimeout(()=>{ window.location.href='onlyadi.html'; },1200);
-  },900);
+  document.getElementById('popup').classList.add('is-visible');
+}
+
+function closePopup(){
+  const btn=document.querySelector('.enter-btn');
+  btn.innerHTML='✦ &nbsp; Enter the Universe &nbsp; ✦';
+  btn.style.borderColor='rgba(180,160,255,0.28)';
+  document.getElementById('popup').classList.remove('is-visible');
 }
 </script>
 </body>
