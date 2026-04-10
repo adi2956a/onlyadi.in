@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ID Card | onlyadi.in</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&family=Noto+Sans+Devanagari:wght@400;800;900&display=swap"
+      rel="stylesheet" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --gold: #f5c842;
+        --gold2: #e0a800;
+        --dark: #0a0a0f;
+        --darker: #050508;
+        --card-bg: #12121a;
+        --surface: #1a1a28;
+        --border: #2a2a3f;
+        --text: #eee;
+        --muted: #888;
+        --accent: #ff3c3c;
+        --blue: #3c8cff;
+        --green: #00e676;
+      }
+
+      body {
+        background: var(--darker);
+        min-height: 100vh;
+        font-family: "Rajdhani", sans-serif;
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      /* Animated grid bg */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(245, 200, 66, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(245, 200, 66, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+      }
+
+      /* ── HEADER ── */
+      .header {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+      .header-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #f5c842, #e0a800);
+        color: #000;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 11px;
+        letter-spacing: 3px;
+        padding: 4px 14px;
+        border-radius: 2px;
+        margin-bottom: 14px;
+      }
+      .header h1 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(38px, 8vw, 72px);
+        letter-spacing: 4px;
+        line-height: 1;
+        background: linear-gradient(135deg, #f5c842 0%, #fff 50%, #f5c842 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .header p {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin-top: 8px;
+      }
+
+      /* ── FORM ── */
+      .form-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 36px 32px;
+        margin-bottom: 48px;
+        position: relative;
+        overflow: hidden;
+      }
+      .form-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #f5c842, #ff3c3c, #3c8cff, #f5c842);
+        background-size: 200%;
+        animation: shimmer 3s linear infinite;
+      }
+      @keyframes shimmer {
+        to {
+          background-position: 200% center;
+        }
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 600px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .form-group.full {
+        grid-column: 1 / -1;
+      }
+
+      .friend-switch {
+        display: flex;
+        gap: 10px;
+      }
+      .friend-option {
+        flex: 1;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 14px;
+        background: var(--card-bg);
+        color: var(--muted);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 18px;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .friend-option.active {
+        background: linear-gradient(135deg, #f5c842, #e0a800);
+        color: #000;
+        border-color: rgba(245, 200, 66, 0.6);
+        box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.14);
+      }
+
+      label {
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: var(--gold);
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      input,
+      select {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 12px 16px;
+        color: var(--text);
+        font-family: "Rajdhani", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        outline: none;
+        width: 100%;
+      }
+      input:focus,
+      select:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.12);
+      }
+      select option {
+        background: #1a1a28;
+      }
+
+      /* Photo upload */
+      .upload-zone {
+        border: 2px dashed var(--border);
+        border-radius: 8px;
+        padding: 28px;
+        text-align: center;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        position: relative;
+      }
+      .upload-zone:hover {
+        border-color: var(--gold);
+        background: rgba(245, 200, 66, 0.04);
+      }
+      .upload-zone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: none;
+        background: none;
+      }
+      .upload-icon {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+      .upload-text {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .upload-text span {
+        color: var(--gold);
+        font-weight: 700;
+      }
+      #preview-thumb {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--gold);
+        margin: 8px auto 0;
+        display: none;
+      }
+
+      /* Generate button */
+      .btn-generate {
+        margin-top: 28px;
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #f5c842, #e0a800);
+        border: none;
+        border-radius: 8px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 22px;
+        letter-spacing: 3px;
+        color: #000;
+        cursor: pointer;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-generate::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+      }
+      .btn-generate:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(245, 200, 66, 0.4);
+      }
+      .btn-generate:active {
+        transform: translateY(0);
+      }
+
+      /* ── ID CARD ── */
+      #card-section {
+        display: none;
+      }
+      #card-section.visible {
+        display: block;
+      }
+
+      .card-section-title {
+        text-align: center;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 28px;
+        letter-spacing: 4px;
+        color: var(--gold);
+        margin-bottom: 28px;
+      }
+
+      .id-card-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 32px;
+      }
+
+      /* THE ID CARD */
+      .id-card {
+        width: min(92vw, 340px);
+        aspect-ratio: 85.6 / 53.98;
+        background: linear-gradient(
+          145deg,
+          #16162a 0%,
+          #0f0f1e 60%,
+          #1a1025 100%
+        );
+        border: 1px solid rgba(245, 200, 66, 0.3);
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        box-shadow:
+          0 0 0 1px rgba(245, 200, 66, 0.1),
+          0 20px 60px rgba(0, 0, 0, 0.8),
+          0 0 80px rgba(245, 200, 66, 0.06);
+        font-family: "Rajdhani", sans-serif;
+      }
+
+      /* Holographic shimmer overlay */
+      .id-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          transparent 0%,
+          rgba(245, 200, 66, 0.04) 25%,
+          rgba(60, 140, 255, 0.04) 50%,
+          rgba(255, 60, 60, 0.03) 75%,
+          transparent 100%
+        );
+        pointer-events: none;
+        z-index: 10;
+        border-radius: 16px;
+      }
+
+      /* Corner pattern */
+      .id-card::after {
+        content: "";
+        position: absolute;
+        bottom: -30px;
+        right: -30px;
+        width: 120px;
+        height: 120px;
+        border: 20px solid rgba(245, 200, 66, 0.06);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      /* Card top stripe */
+      .card-top-stripe {
+        height: 5px;
+        background: linear-gradient(90deg, #f5c842, #ff3c3c, #3c8cff, #f5c842);
+        background-size: 200%;
+        animation: shimmer 3s linear infinite;
+      }
+
+      .card-corner-publisher {
+        position: absolute;
+        left: 6px;
+        bottom: 4px;
+        z-index: 2;
+        font-size: 5px;
+        letter-spacing: 1px;
+        color: rgba(245, 200, 66, 0.58);
+        line-height: 1.1;
+        text-transform: none;
+      }
+      .card-corner-publisher span {
+        color: #ffd65a;
+        font-weight: 700;
+        font-size: 6px;
+        letter-spacing: 0.2px;
+      }
+
+      /* Card header */
+      .card-header {
+        background: linear-gradient(
+          135deg,
+          rgba(245, 200, 66, 0.12),
+          rgba(245, 200, 66, 0.04)
+        );
+        padding: 10px 14px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(245, 200, 66, 0.15);
+      }
+      .card-org {
+        display: flex;
+        flex-direction: column;
+      }
+      .card-org-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 18px;
+        letter-spacing: 2px;
+        color: var(--gold);
+        line-height: 1;
+      }
+      .card-org-sub {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        color: rgba(245, 200, 66, 0.6);
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+      .card-logo-area {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+      }
+      .card-logo-icon {
+        width: 30px;
+        height: 30px;
+        background: linear-gradient(135deg, #f5c842, #e0a800);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #000;
+        font-weight: 900;
+        font-family: "Bebas Neue", sans-serif;
+        letter-spacing: 0;
+        box-shadow: 0 0 16px rgba(245, 200, 66, 0.4);
+      }
+
+      /* Card body */
+      .card-body {
+        padding: 12px 14px 10px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .card-photo-col {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      .card-photo-frame {
+        width: 74px;
+        height: 86px;
+        border: 2px solid rgba(245, 200, 66, 0.5);
+        border-radius: 8px;
+        background: linear-gradient(135deg, #1e1e30, #16162a);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .card-photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .card-photo-placeholder {
+        font-size: 36px;
+        opacity: 0.4;
+      }
+      .card-photo-corner {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-color: var(--gold);
+        border-style: solid;
+      }
+      .card-photo-corner.tl {
+        top: 3px;
+        left: 3px;
+        border-width: 2px 0 0 2px;
+      }
+      .card-photo-corner.tr {
+        top: 3px;
+        right: 3px;
+        border-width: 2px 2px 0 0;
+      }
+      .card-photo-corner.bl {
+        bottom: 3px;
+        left: 3px;
+        border-width: 0 0 2px 2px;
+      }
+      .card-photo-corner.br {
+        bottom: 3px;
+        right: 3px;
+        border-width: 0 2px 2px 0;
+      }
+
+      .card-chip {
+        width: 28px;
+        height: 20px;
+        background: linear-gradient(135deg, #c8a84b, #f5c842, #a07820);
+        border-radius: 3px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 1.5px;
+        padding: 3px;
+      }
+      .chip-cell {
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 1px;
+      }
+
+      /* Card info */
+      .card-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .card-certified-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(245, 200, 66, 0.1);
+        border: 1px solid rgba(245, 200, 66, 0.3);
+        border-radius: 3px;
+        padding: 2px 8px;
+        font-size: 8px;
+        letter-spacing: 2px;
+        color: var(--gold);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .cert-dot {
+        width: 5px;
+        height: 5px;
+        background: var(--green);
+        border-radius: 50%;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.8);
+        }
+      }
+
+      .card-name-en {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 22px;
+        letter-spacing: 2px;
+        color: #fff;
+        line-height: 1;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .card-title-role {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        color: var(--gold);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+
+      .card-detail-row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .card-field {
+        display: flex;
+        gap: 6px;
+        align-items: baseline;
+      }
+      .field-key {
+        font-size: 7px;
+        letter-spacing: 1.5px;
+        color: var(--muted);
+        text-transform: uppercase;
+        min-width: 58px;
+        flex-shrink: 0;
+      }
+      .field-val {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .field-val.highlight {
+        color: var(--gold);
+      }
+
+      .card-aditya-level {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+      }
+      .level-label {
+        font-size: 7px;
+        letter-spacing: 1px;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      .level-bars {
+        display: flex;
+        gap: 2px;
+      }
+      .level-bar {
+        width: 11px;
+        height: 5px;
+        border-radius: 1px;
+        background: var(--border);
+        transition: background 0.3s;
+      }
+      .level-bar.active {
+        background: var(--gold);
+      }
+
+      /* Card footer */
+      .card-footer {
+        padding: 8px 14px;
+        border-top: 1px solid rgba(245, 200, 66, 0.1);
+        background: rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .card-id-code {
+        font-family: "Orbitron", sans-serif;
+        font-size: 8px;
+        color: var(--muted);
+        letter-spacing: 1px;
+      }
+
+      .card-barcode {
+        display: flex;
+        gap: 1px;
+        align-items: flex-end;
+      }
+      .barcode-line {
+        background: rgba(245, 200, 66, 0.5);
+        border-radius: 0.5px;
+      }
+
+      /* Card bottom */
+      .card-bottom {
+        margin: 4px 8px 8px;
+        padding: 8px 14px 9px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(245, 200, 66, 0.35);
+        border-radius: 0 0 18px 18px;
+        background: linear-gradient(
+          90deg,
+          rgba(17, 18, 33, 0.98) 0%,
+          rgba(32, 20, 52, 0.94) 58%,
+          rgba(22, 18, 30, 0.98) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      .card-bottom::after {
+        content: "";
+        position: absolute;
+        right: -18px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        border: 16px solid rgba(255, 255, 255, 0.04);
+        pointer-events: none;
+      }
+      .card-brand {
+        font-size: 7px;
+        color: rgba(245, 200, 66, 0.62);
+        letter-spacing: 1.8px;
+        text-transform: none;
+        position: relative;
+        z-index: 1;
+      }
+      .card-brand span {
+        color: #ffd65a;
+        font-weight: 800;
+        font-size: 11px;
+        letter-spacing: 0.4px;
+      }
+      .card-valid {
+        font-size: 7px;
+        color: rgba(255, 255, 255, 0.32);
+        letter-spacing: 2px;
+        text-align: right;
+        position: relative;
+        z-index: 1;
+      }
+      .card-valid strong {
+        color: #fff;
+        display: block;
+        font-size: 11px;
+        letter-spacing: 1.2px;
+        margin-top: 2px;
+      }
+
+      /* Magnetic strip (back decoration) */
+      .card-mag-strip {
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(245, 200, 66, 0.15) 20%,
+          rgba(60, 140, 255, 0.15) 50%,
+          rgba(245, 200, 66, 0.15) 80%,
+          transparent
+        );
+        margin: 0 14px;
+        margin-bottom: 4px;
+      }
+
+      /* Stamp */
+      .card-stamp {
+        position: absolute;
+        bottom: 42px;
+        right: 10px;
+        width: 42px;
+        height: 42px;
+        border: 2px solid rgba(0, 230, 118, 0.5);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(-18deg);
+        opacity: 0.7;
+      }
+      .stamp-text {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 6px;
+        letter-spacing: 1px;
+        color: var(--green);
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      /* Action buttons */
+      .card-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .btn {
+        padding: 12px 28px;
+        border-radius: 7px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 16px;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+      }
+      .btn-download {
+        background: linear-gradient(135deg, #f5c842, #e0a800);
+        color: #000;
+      }
+      .btn-download:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(245, 200, 66, 0.35);
+      }
+      .btn-reset {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+      .btn-reset:hover {
+        border-color: var(--muted);
+        color: var(--text);
+      }
+
+      /* Decorative elements */
+      .hex-grid {
+        position: fixed;
+        top: 5%;
+        right: -60px;
+        width: 200px;
+        height: 200px;
+        opacity: 0.04;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-badge">⭐ OFFICIAL DOCUMENT ⭐</div>
+        <h1>ADITYA FRIEND<br />ID GENERATOR</h1>
+        <p>Generate your Certified Friend of Aditya Identity Card</p>
+      </div>
+
+      <!-- FORM -->
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Select Friend Type</label>
+            <div class="friend-switch">
+              <button
+                type="button"
+                class="friend-option active"
+                data-friend-type="aditya">
+                Aditya Friend
+              </button>
+              <button
+                type="button"
+                class="friend-option"
+                data-friend-type="aditi">
+                Aditi Friend
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Your Full Name</label>
+            <input
+              type="text"
+              id="inp-name"
+              placeholder="e.g. Rohit Sharma"
+              maxlength="24" />
+          </div>
+
+          <div class="form-group">
+            <label>Nickname / Alias</label>
+            <input
+              type="text"
+              id="inp-alias"
+              placeholder="e.g. Rocky, Bhidu"
+              maxlength="16" />
+          </div>
+
+          <div class="form-group">
+            <label>Friendship Since</label>
+            <input type="date" id="inp-date" />
+          </div>
+
+          <div class="form-group">
+            <label>Friendship Level</label>
+            <select id="inp-level">
+              <option value="1">⭐ Associate (Naya Dost)</option>
+              <option value="2">⭐⭐ Trusted Ally</option>
+              <option value="3" selected>⭐⭐⭐ Verified Bhai</option>
+              <option value="4">⭐⭐⭐⭐ Senior Bhai</option>
+              <option value="5">⭐⭐⭐⭐⭐ Legend Tier</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Your City / Location</label>
+            <input
+              type="text"
+              id="inp-city"
+              placeholder="e.g. Indore, MP"
+              maxlength="20" />
+          </div>
+
+          <div class="form-group">
+            <label>Superpower / Skill</label>
+            <input
+              type="text"
+              id="inp-skill"
+              placeholder="e.g. Roasting, Chai Expert"
+              maxlength="22" />
+          </div>
+
+          <div class="form-group full">
+            <label>Upload Your Photo (Optional)</label>
+            <div class="upload-zone" id="upload-zone">
+              <input type="file" id="inp-photo" accept="image/*" />
+              <div class="upload-icon">📸</div>
+              <div class="upload-text">
+                Click or drag photo here &nbsp;·&nbsp; <span>Browse</span>
+              </div>
+              <img id="preview-thumb" src="" alt="" />
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-generate" onclick="generateCard()">
+          ⚡ GENERATE FRIEND ID CARD
+        </button>
+      </div>
+
+      <!-- CARD OUTPUT -->
+      <div id="card-section">
+        <div class="card-section-title">🪪 YOUR CERTIFIED FRIEND CARD</div>
+
+        <div class="id-card-wrapper">
+          <div class="id-card" id="id-card">
+            <div class="card-top-stripe"></div>
+            <div class="card-corner-publisher">
+              Powered by <span>onlyaadi.in</span>
+            </div>
+
+            <div class="card-header">
+              <div class="card-org">
+                <div class="card-org-name" id="card-friend-type">
+                  ADITYA FRIEND
+                </div>
+                <div class="card-org-sub">
+                  Official Friend Registry · Est. 2024
+                </div>
+              </div>
+              <div class="card-logo-area">
+                <div class="card-logo-icon">A</div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="card-photo-col">
+                <div class="card-photo-frame" id="photo-frame">
+                  <div class="card-photo-corner tl"></div>
+                  <div class="card-photo-corner tr"></div>
+                  <div class="card-photo-corner bl"></div>
+                  <div class="card-photo-corner br"></div>
+                  <span class="card-photo-placeholder" id="photo-placeholder"
+                    >👤</span
+                  >
+                  <img
+                    id="card-photo-img"
+                    src=""
+                    alt=""
+                    style="
+                      display: none;
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      position: absolute;
+                      inset: 0;
+                    " />
+                </div>
+                <div class="card-chip">
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                  <div class="chip-cell"></div>
+                </div>
+              </div>
+
+              <div class="card-info">
+                <div class="card-certified-badge" id="card-certified-badge">
+                  <span class="cert-dot"></span>
+                  CERTIFIED ADITYA FRIEND
+                </div>
+                <div class="card-name-en" id="card-name">YOUR NAME</div>
+                <div class="card-title-role" id="card-alias">aka —</div>
+
+                <div class="card-detail-row">
+                  <div class="card-field">
+                    <span class="field-key">Friend Since</span>
+                    <span class="field-val highlight" id="card-date">—</span>
+                  </div>
+                  <div class="card-field">
+                    <span class="field-key">City</span>
+                    <span class="field-val" id="card-city">—</span>
+                  </div>
+                  <div class="card-field">
+                    <span class="field-key">Superpower</span>
+                    <span class="field-val" id="card-skill">—</span>
+                  </div>
+                </div>
+
+                <div class="card-aditya-level">
+                  <span class="level-label">Level</span>
+                  <div class="level-bars" id="level-bars">
+                    <div class="level-bar" id="lb1"></div>
+                    <div class="level-bar" id="lb2"></div>
+                    <div class="level-bar" id="lb3"></div>
+                    <div class="level-bar" id="lb4"></div>
+                    <div class="level-bar" id="lb5"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stamp -->
+            <div class="card-stamp">
+              <div class="stamp-text">VERIFIED<br />BHAI<br />✓</div>
+            </div>
+
+            <div class="card-mag-strip"></div>
+
+            <div class="card-footer">
+              <div class="card-id-code" id="card-id">ID: ADTY-000000</div>
+              <div class="card-barcode" id="barcode"></div>
+            </div>
+
+            <div class="card-bottom">
+              <div class="card-brand">
+                Published by <span>onlyaadi.in</span>
+              </div>
+              <div class="card-valid">
+                <span>VALID THROUGH</span>
+                <strong id="card-valid-till">LIFETIME</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-download" onclick="downloadCard()">
+            ⬇ DOWNLOAD CARD
+          </button>
+          <button class="btn btn-reset" onclick="resetForm()">
+            ↩ MAKE ANOTHER
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+      let photoDataUrl = null;
+      let selectedFriendType = "aditya";
+
+      document.querySelectorAll(".friend-option").forEach((button) => {
+        button.addEventListener("click", function () {
+          selectedFriendType = this.dataset.friendType;
+          document
+            .querySelectorAll(".friend-option")
+            .forEach((item) => item.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+
+      // Photo preview
+      document
+        .getElementById("inp-photo")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function (ev) {
+            photoDataUrl = ev.target.result;
+            const thumb = document.getElementById("preview-thumb");
+            thumb.src = photoDataUrl;
+            thumb.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        });
+
+      function generateCard() {
+        const name =
+          document.getElementById("inp-name").value.trim() || "YOUR NAME";
+        const alias = document.getElementById("inp-alias").value.trim();
+        const date = document.getElementById("inp-date").value;
+        const city = document.getElementById("inp-city").value.trim() || "—";
+        const skill = document.getElementById("inp-skill").value.trim() || "—";
+        const level = parseInt(document.getElementById("inp-level").value);
+        const friendLabel =
+          selectedFriendType === "aditi" ? "ADITI FRIEND" : "ADITYA FRIEND";
+        const friendGang =
+          selectedFriendType === "aditi" ? "ADITI GANG" : "ADITYA GANG";
+
+        // Format date
+        let dateStr = "—";
+        if (date) {
+          const d = new Date(date);
+          dateStr = d.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          });
+        }
+
+        // Unique ID
+        const uid =
+          "ADTY-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+        // Update card
+        document.getElementById("card-friend-type").textContent = friendLabel;
+        document.getElementById("card-certified-badge").innerHTML =
+          '<span class="cert-dot"></span> CERTIFIED ' + friendLabel;
+        document.getElementById("card-name").textContent = name.toUpperCase();
+        document.getElementById("card-alias").textContent = alias
+          ? "aka " + alias
+          : friendGang;
+        document.getElementById("card-date").textContent = dateStr;
+        document.getElementById("card-city").textContent = city;
+        document.getElementById("card-skill").textContent = skill;
+        document.getElementById("card-id").textContent = "ID: " + uid;
+        document.getElementById("card-valid-till").textContent = "LIFETIME ♾";
+
+        // Level bars
+        for (let i = 1; i <= 5; i++) {
+          const bar = document.getElementById("lb" + i);
+          bar.classList.toggle("active", i <= level);
+        }
+
+        // Photo
+        const img = document.getElementById("card-photo-img");
+        const ph = document.getElementById("photo-placeholder");
+        if (photoDataUrl) {
+          img.src = photoDataUrl;
+          img.style.display = "block";
+          ph.style.display = "none";
+        } else {
+          img.style.display = "none";
+          ph.style.display = "block";
+        }
+
+        // Barcode
+        generateBarcode(uid);
+
+        // Show
+        const sec = document.getElementById("card-section");
+        sec.classList.add("visible");
+        sec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function generateBarcode(uid) {
+        const bc = document.getElementById("barcode");
+        bc.innerHTML = "";
+        const chars = uid.split("");
+        const heights = [
+          8, 12, 6, 14, 10, 8, 16, 6, 12, 10, 8, 14, 6, 12, 10, 8, 16, 6, 10, 8,
+        ];
+        for (let i = 0; i < 20; i++) {
+          const line = document.createElement("div");
+          line.className = "barcode-line";
+          line.style.width = i % 3 === 0 ? "2px" : "1px";
+          line.style.height = heights[i] + "px";
+          bc.appendChild(line);
+        }
+      }
+
+      async function downloadCard() {
+        const card = document.getElementById("id-card");
+        try {
+          const canvas = await html2canvas(card, {
+            scale: 3,
+            backgroundColor: null,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+          });
+          const link = document.createElement("a");
+          link.download = "aditya-friend-id.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        } catch (e) {
+          alert("Download failed. Try right-click → Save image on the card.");
+        }
+      }
+
+      function resetForm() {
+        document.getElementById("card-section").classList.remove("visible");
+        document.getElementById("inp-name").value = "";
+        document.getElementById("inp-alias").value = "";
+        document.getElementById("inp-date").value = "";
+        document.getElementById("inp-city").value = "";
+        document.getElementById("inp-skill").value = "";
+        document.getElementById("inp-level").value = "3";
+        document.getElementById("preview-thumb").style.display = "none";
+        selectedFriendType = "aditya";
+        document.querySelectorAll(".friend-option").forEach((item) => {
+          item.classList.toggle("active", item.dataset.friendType === "aditya");
+        });
+        photoDataUrl = null;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    </script>
+  </body>
+</html>
